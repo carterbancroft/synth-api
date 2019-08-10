@@ -27,6 +27,11 @@ const start = async port => {
   return app.listen(apiPort)
 }
 
+const stop = async app => {
+  process.exit(0)
+}
+
 module.exports = {
   start,
+  stop,
 }

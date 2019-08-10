@@ -7,7 +7,9 @@ const server = require('../server')
 
 
 describe('/graphql', () => {
-  before(() => server.start())
+  let app
+  before(() => app = server.start())
+  after(() => server.stop(app))
 
   it('should work', async () => {
     const graphqlQuery = `{
