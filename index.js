@@ -22,5 +22,12 @@ app.use('/graphql', graphQlHttp(graphQlOptions))
 // First connect to the database and then listen for requests on port 4000
 dbConfig.connect().then(() => {
   app.listen(PORT)
-  console.log(`Running a GraphQL API server as ${API_DOMAIN}:${PORT}/graphql`)
+
+  console.log(`#############################
+ Running Synth API
+ Location: ${API_DOMAIN}
+ Port: ${PORT}
+
+ Listening for requests...
+  `)
 })

@@ -12,6 +12,8 @@
   },
   "scripts": {
     "lint": "eslint .",
+    "start": "node index.js",
+    "watch": "nodemon --exec 'npm run lint && npm start'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -21,6 +23,7 @@
     "mongoose": "^5.6.9"
   },
   "devDependencies": {
-    "eslint": "^6.1.0"
+    "eslint": "^6.1.0",
+    "nodemon": "^1.19.1"
   }
 }
