@@ -1,46 +1,26 @@
 'use strict'
 
 const express = require('express')
+const graphQlHttp = require('express-graphql')
+
 const dbConfig = require('./config/db')
-const graphqlHttp = require('express-graphql')
-const schema = require('./graphql/schema/index')
-const Composition = require('./models/composition')
+const graphQlSchema = require('./graphql/schema/index')
+const graphQlResolvers = require('./graphql/resolvers/index')
 
-
-
-const rootValue = {
-  compositions: async () => {
-    const allCompositions = await Composition.find()
-    return allCompositions
-  },
-
-  createComposition: async (args) => {
-    const compositionInput = args.compositionInput
-    const currentDate = new Date()
-
-    const composition = new Composition({
-      title: compositionInput.title,
-      description: compositionInput.description,
-      data: compositionInput.data,
-      created: currentDate,
-      modified: currentDate,
-    })
-
-    await composition.save(composition)
-
-    return composition
-  },
-}
+const API_DOMAIN = 'http://localhost'
+const PORT = 4000
 
 const app = express()
-const options = {
-  schema,
-  rootValue,
+
+const graphQlOptions = {
+  schema: graphQlSchema,
+  rootValue: graphQlResolvers,
   graphiql: true,
 }
-app.use('/graphql', graphqlHttp(options))
+app.use('/graphql', graphQlHttp(graphQlOptions))
 
+// First connect to the database and then listen for requests on port 4000
 dbConfig.connect().then(() => {
-  app.listen(4000)
-  console.log('Running a GraphQL API server as http://localhost:4000/graphql')
+  app.listen(PORT)
+  console.log(`Running a GraphQL API server as ${API_DOMAIN}:${PORT}/graphql`)
 })

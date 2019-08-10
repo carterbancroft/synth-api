@@ -1,7 +1,8 @@
 'use strict'
 
 const mongoose = require('mongoose')
-const url = 'mongodb://localhost:27017/synth'
+const dbName = 'synth'
+const url = `mongodb://localhost:27017/${dbName}`
 
 
 const connect = async () => {
