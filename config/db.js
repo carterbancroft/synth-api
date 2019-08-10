@@ -13,6 +13,4 @@ const connect = async () => {
   return await mongoose.connect(url, options)
 }
 
-module.exports = {
-  connect,
-}
+module.exports = connect

@@ -12,9 +12,10 @@
   },
   "scripts": {
     "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "mocha --recursive --colors",
     "start": "node index.js",
-    "watch": "nodemon --exec 'npm run lint && npm start'",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "watch": "nodemon --exec 'npm test && npm start'"
   },
   "dependencies": {
     "express": "^4.17.1",
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "eslint": "^6.1.0",
+    "mocha": "^6.2.0",
     "nodemon": "^1.19.1"
   }
 }
