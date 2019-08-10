@@ -3,39 +3,10 @@
 const express = require('express')
 const dbConfig = require('./config/db')
 const graphqlHttp = require('express-graphql')
-const { buildSchema } = require('graphql')
+const schema = require('./graphql/schema/index')
 const Composition = require('./models/composition')
 
 
-const schema = buildSchema(`
-  type Composition {
-    _id: ID!
-    title: String!
-    data: String!
-    description: String!
-    created: String!
-    modified: String!
-  }
-
-  input CompositionInput {
-    title: String!
-    description: String!
-    data: String!
-  }
-
-  type Query {
-    compositions: [Composition!]!
-  }
-
-  type Mutation {
-    createComposition(compositionInput: CompositionInput): Composition
-  }
-
-  schema {
-    query: Query
-    mutation: Mutation
-  }
-`)
 
 const rootValue = {
   compositions: async () => {
