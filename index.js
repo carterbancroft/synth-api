@@ -2,12 +2,8 @@
 
 const server = require('./server')
 
-const app = server.start()
-
-console.log(`########################################
-  Running Synth API
-  Location: ${app.url}
-  Port: ${app.port}
-
-  Listening for requests...`
-)
+server.start()
+  .then(app => {
+    const port = app.address().port
+    console.log(`Listening for requests at http://localhost:${port}...`)
+  })
