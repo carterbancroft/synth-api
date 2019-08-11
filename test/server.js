@@ -14,9 +14,9 @@ describe('/graphql', () => {
     before(async () => app = await server.start())
     before(async () => {
       const mock = new Composition({
-        title: 'test title',
-        description: 'test description',
-        data: 'test data',
+        title: 'title',
+        description: 'description',
+        data: 'data',
         created: new Date(),
         modified: new Date(),
       })
@@ -55,9 +55,9 @@ describe('/graphql', () => {
 
       const expected = {
         compositions: [{
-          title: 'test title',
-          description: 'test description',
-          data: 'test data'
+          title: 'title',
+          description: 'description',
+          data: 'data'
         }]
       }
 
