@@ -1,17 +1,45 @@
 'use strict'
 
+// 3rd party
 const assert = require('assert')
 const request = require('request-promise-native')
 
+// Project
 const server = require('../server')
 const Composition = require('../models/composition')
 
 
+// Start an instance of the app that we can test again.
+let app
+before(async () => app = await server.start())
+after(() => server.stop(app))
+
+// Helper to make requests to teh GraphQL endpoint.
+async function makeGraphQlRequest(query) {
+  let response
+
+  try {
+    response = await request({
+      method: 'POST',
+      baseUrl: `http://localhost:${app.address().port}`,
+      uri: '/graphql',
+      body: {
+        query,
+      },
+      resolveWithFullResponse: true,
+      json: true,
+    })
+  }
+  catch (err) {
+    console.log(err.message)
+    throw(err)
+  }
+
+  return response
+}
+
 describe('/graphql', () => {
   describe('query', () => {
-    let app
-
-    before(async () => app = await server.start())
     before(async () => {
       const mock = new Composition({
         title: 'title',
@@ -29,13 +57,10 @@ describe('/graphql', () => {
         throw err
       }
     })
-
-    after(async () => await Composition.deleteMany())
-    after(() => server.stop(app))
-
+    afterEach(async () => await Composition.deleteMany())
 
     it('should query the data from the API', async () => {
-      const graphqlQuery = `{
+      const query = `{
         compositions {
           title
           description
@@ -43,15 +68,7 @@ describe('/graphql', () => {
         }
       }`
 
-      const response = await request({
-        baseUrl: `http://localhost:4000`,
-        uri: '/graphql',
-        body: {
-          query: graphqlQuery,
-        },
-        resolveWithFullResponse: true,
-        json: true,
-      })
+      const response = await makeGraphQlRequest(query)
 
       const expected = {
         compositions: [{
@@ -65,7 +82,36 @@ describe('/graphql', () => {
     })
   })
 
+
   describe('mutation', () => {
-    it('should write data to the DB through the API')
+    afterEach(async () => await Composition.deleteMany())
+
+    it('should write data to the DB through the API', async () => {
+      const mutation = `mutation {
+        createComposition(
+          compositionInput: {
+            title:"title",
+            description:"desc",
+            data:"data"
+          }
+        ){
+          title
+          description
+          data
+        }
+      }`
+
+      const response = await makeGraphQlRequest(mutation)
+
+      const expected = {
+        createComposition: {
+          title: 'title',
+          description: 'desc',
+          data: 'data',
+        }
+      }
+
+      assert.deepEqual(response.body.data, expected)
+    })
   })
 })
