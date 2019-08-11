@@ -16,26 +16,19 @@ after(() => server.stop(app))
 
 // Helper to make requests to teh GraphQL endpoint.
 async function makeGraphQlRequest(query) {
-  let response
-
-  try {
-    response = await request({
-      method: 'POST',
-      baseUrl: `http://localhost:${app.address().port}`,
-      uri: '/graphql',
-      body: {
-        query,
-      },
-      resolveWithFullResponse: true,
-      json: true,
-    })
-  }
-  catch (err) {
+  return await request({
+    baseUrl: `http://localhost:${app.address().port}`,
+    method: 'POST',
+    uri: '/graphql',
+    body: {
+      query,
+    },
+    resolveWithFullResponse: true,
+    json: true,
+  }).catch(err => {
     console.log(err.message)
     throw(err)
-  }
-
-  return response
+  })
 }
 
 describe('/graphql', () => {
@@ -49,13 +42,7 @@ describe('/graphql', () => {
         modified: new Date(),
       })
 
-      try {
-        await mock.save()
-      }
-      catch (err) {
-        console.log(err)
-        throw err
-      }
+      await mock.save().catch(err => console.log(err))
     })
     afterEach(async () => await Composition.deleteMany())
 
@@ -74,7 +61,7 @@ describe('/graphql', () => {
         compositions: [{
           title: 'title',
           description: 'description',
-          data: 'data'
+          data: 'data',
         }]
       }
 
