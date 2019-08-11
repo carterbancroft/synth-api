@@ -27,7 +27,7 @@ const start = async port => {
   return app.listen(apiPort)
 }
 
-const stop = async app => {
+const stop = app => {
   process.exit(0)
 }
 

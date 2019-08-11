@@ -2,15 +2,14 @@
 
 const mongoose = require('mongoose')
 const dbName = 'synth'
-const url = `mongodb://localhost:27017/${dbName}`
-
+const uri = `mongodb://localhost:27017/${dbName}_${process.env.NODE_ENV}`
 
 const connect = async () => {
   const options = {
     useNewUrlParser: true,
   }
 
-  return await mongoose.connect(url, options)
+  return await mongoose.connect(uri, options)
 }
 
 module.exports = connect
