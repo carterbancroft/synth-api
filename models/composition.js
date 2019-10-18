@@ -5,16 +5,8 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const compositionSchema = new Schema({
-  title: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
   data: {
-    type: String,
+    type: [Boolean],
     required: true,
   },
   created: {
@@ -24,7 +16,11 @@ const compositionSchema = new Schema({
   modified: {
     type: Date,
     required: true,
-  }
+  },
+  shortid: {
+    type: String,
+    required: true,
+  },
 })
 
 module.exports = mongoose.model('Composition', compositionSchema)

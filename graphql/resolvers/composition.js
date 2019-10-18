@@ -1,5 +1,7 @@
 'use strict'
 
+const shortid = require('shortid')
+
 const Composition = require('../../models/composition')
 
 const resolver = {
@@ -18,7 +20,10 @@ const resolver = {
       data: compositionInput.data,
       created: currentDate,
       modified: currentDate,
+      shortid: shortid.generate(),
     })
+
+    console.log(composition)
 
     await composition.save(composition)
 

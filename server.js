@@ -1,5 +1,6 @@
 'use strict'
 
+const cors = require('cors')
 const express = require('express')
 const graphQlHttp = require('express-graphql')
 
@@ -10,11 +11,13 @@ const graphQlResolvers = require('./graphql/resolvers/index')
 const start = async port => {
   const app = express()
 
+  app.use(cors()) // Setup ACAO for CORS access
+
   app.use('/graphql', graphQlHttp(request => {
     return {
       schema: graphQlSchema,
       rootValue: graphQlResolvers,
-      graphiql: true,
+      graphiql: false,
     }
   }))
 
