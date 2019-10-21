@@ -5,14 +5,18 @@ const { buildSchema } = require('graphql')
 const schema = buildSchema(`
   type Composition {
     _id: ID!
-    data: [Boolean!]!
+    recording: [InstrumentRecording]
     created: String!
     modified: String!
     shortid: String!
   }
 
+  type InstrumentRecording {
+    name: String!
+  }
+
   input CompositionInput {
-    data: [Boolean!]!
+    data: [InstrumentRecording!]!
   }
 
   type Query {

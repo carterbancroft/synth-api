@@ -11,12 +11,12 @@ const resolver = {
   },
 
   createComposition: async (args) => {
+    console.log('in create')
+
     const compositionInput = args.compositionInput
     const currentDate = new Date()
 
     const composition = new Composition({
-      title: compositionInput.title,
-      description: compositionInput.description,
       data: compositionInput.data,
       created: currentDate,
       modified: currentDate,

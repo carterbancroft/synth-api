@@ -5,8 +5,8 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const compositionSchema = new Schema({
-  data: {
-    type: [Boolean],
+  recording: {
+    type: [{ name: String, data: [Boolean] }],
     required: true,
   },
   created: {

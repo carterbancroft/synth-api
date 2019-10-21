@@ -14,10 +14,11 @@ const start = async port => {
   app.use(cors()) // Setup ACAO for CORS access
 
   app.use('/graphql', graphQlHttp(request => {
+    console.log('in the endpoint')
     return {
       schema: graphQlSchema,
       rootValue: graphQlResolvers,
-      graphiql: false,
+      graphiql: true,
     }
   }))
 

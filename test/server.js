@@ -11,7 +11,11 @@ const Composition = require('../models/composition')
 
 // Start an instance of the app that we can test again.
 let app
-before(async () => app = await server.start())
+before(async () => {
+  console.log('IN server.start')
+  app = await server.start()
+  console.log('after')
+})
 after(() => server.stop(app))
 
 // Helper to make requests to teh GraphQL endpoint.
@@ -34,12 +38,12 @@ async function makeGraphQlRequest(query) {
 describe('/graphql', () => {
   describe('query', () => {
     before(async () => {
+      console.log('IN!')
       const mock = new Composition({
-        title: 'title',
-        description: 'description',
-        data: 'data',
+        data: ['data'],
         created: new Date(),
         modified: new Date(),
+        shortid: 'someshortid',
       })
 
       await mock.save().catch(err => console.log(err))
@@ -49,9 +53,8 @@ describe('/graphql', () => {
     it('should query the data from the API', async () => {
       const query = `{
         compositions {
-          title
-          description
           data
+          shortid
         }
       }`
 
@@ -59,9 +62,8 @@ describe('/graphql', () => {
 
       const expected = {
         compositions: [{
-          title: 'title',
-          description: 'description',
-          data: 'data',
+          data: ['data'],
+          shortid: 'someshortid',
         }]
       }
 
@@ -73,17 +75,14 @@ describe('/graphql', () => {
   describe('mutation', () => {
     afterEach(async () => await Composition.deleteMany())
 
-    it('should write data to the DB through the API', async () => {
+    it.only('should write data to the DB through the API', async () => {
+      console.log('in')
       const mutation = `mutation {
         createComposition(
           compositionInput: {
-            title:"title",
-            description:"desc",
-            data:"data"
+            data:['test']
           }
         ){
-          title
-          description
           data
         }
       }`
@@ -92,8 +91,6 @@ describe('/graphql', () => {
 
       const expected = {
         createComposition: {
-          title: 'title',
-          description: 'desc',
           data: 'data',
         }
       }
