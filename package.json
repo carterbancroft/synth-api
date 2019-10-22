@@ -14,6 +14,7 @@
     "lint": "eslint .",
     "pretest": "npm run lint",
     "test": "NODE_ENV=${NODE_ENV:-unit_testing} mocha --recursive --colors",
+    "test:only": "NODE_ENV=${NODE_ENV:-unit_testing} mocha --recursive --colors",
     "start": "NODE_ENV=${NODE_ENV:-development} node index.js",
     "watch": "nodemon --exec 'npm test && npm start'"
   },

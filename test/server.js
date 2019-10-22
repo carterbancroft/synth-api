@@ -9,13 +9,11 @@ const server = require('../server')
 const Composition = require('../models/composition')
 
 
+const TEST_PORT = 4001
+
 // Start an instance of the app that we can test again.
 let app
-before(async () => {
-  console.log('IN server.start')
-  app = await server.start()
-  console.log('after')
-})
+before(async () => app = await server.start(TEST_PORT))
 after(() => server.stop(app))
 
 // Helper to make requests to teh GraphQL endpoint.
@@ -30,7 +28,7 @@ async function makeGraphQlRequest(query) {
     resolveWithFullResponse: true,
     json: true,
   }).catch(err => {
-    console.log(err.message)
+    console.dir(err.message)
     throw(err)
   })
 }
@@ -38,22 +36,29 @@ async function makeGraphQlRequest(query) {
 describe('/graphql', () => {
   describe('query', () => {
     before(async () => {
-      console.log('IN!')
       const mock = new Composition({
-        data: ['data'],
+        recording: [
+          {
+            instrument: 'Bass',
+            data: [true, false]
+          }
+        ],
         created: new Date(),
         modified: new Date(),
         shortid: 'someshortid',
       })
 
-      await mock.save().catch(err => console.log(err))
+      await mock.save()
     })
     afterEach(async () => await Composition.deleteMany())
 
     it('should query the data from the API', async () => {
       const query = `{
         compositions {
-          data
+          recording {
+            instrument
+            data
+          }
           shortid
         }
       }`
@@ -62,7 +67,12 @@ describe('/graphql', () => {
 
       const expected = {
         compositions: [{
-          data: ['data'],
+          recording: [
+            {
+              instrument: 'Bass',
+              data: [true, false]
+            }
+          ],
           shortid: 'someshortid',
         }]
       }
@@ -75,15 +85,17 @@ describe('/graphql', () => {
   describe('mutation', () => {
     afterEach(async () => await Composition.deleteMany())
 
-    it.only('should write data to the DB through the API', async () => {
-      console.log('in')
+    it('should write data to the DB through the API', async () => {
       const mutation = `mutation {
         createComposition(
           compositionInput: {
-            data:['test']
+            recording:[{instrument: "Bass", data: [true, false]}]
           }
         ){
-          data
+          recording {
+            instrument
+            data
+          }
         }
       }`
 
@@ -91,7 +103,12 @@ describe('/graphql', () => {
 
       const expected = {
         createComposition: {
-          data: 'data',
+          recording: [
+            {
+              instrument: 'Bass',
+              data: [true, false]
+            }
+          ]
         }
       }
 

@@ -6,7 +6,7 @@ const Schema = mongoose.Schema
 
 const compositionSchema = new Schema({
   recording: {
-    type: [{ name: String, data: [Boolean] }],
+    type: [{ instrument: String, data: [Boolean] }],
     required: true,
   },
   created: {

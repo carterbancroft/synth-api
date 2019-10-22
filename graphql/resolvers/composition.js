@@ -11,19 +11,15 @@ const resolver = {
   },
 
   createComposition: async (args) => {
-    console.log('in create')
-
     const compositionInput = args.compositionInput
     const currentDate = new Date()
 
     const composition = new Composition({
-      data: compositionInput.data,
+      recording: compositionInput.recording,
       created: currentDate,
       modified: currentDate,
       shortid: shortid.generate(),
     })
-
-    console.log(composition)
 
     await composition.save(composition)
 
