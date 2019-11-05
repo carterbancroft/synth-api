@@ -27,6 +27,7 @@ const schema = buildSchema(`
 
   type Query {
     compositions: [Composition!]!
+    composition(shortid: String!): Composition!
   }
 
   type Mutation {

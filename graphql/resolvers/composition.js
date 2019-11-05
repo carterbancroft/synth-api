@@ -6,8 +6,11 @@ const Composition = require('../../models/composition')
 
 const resolver = {
   compositions: async () => {
-    const allCompositions = await Composition.find()
-    return allCompositions
+    return await Composition.find()
+  },
+
+  composition: async (params) => {
+    return await Composition.findOne({ shortid: params.shortid })
   },
 
   createComposition: async (args) => {
